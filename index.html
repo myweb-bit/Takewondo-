@@ -1,0 +1,1708 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Champions Sports Academy | Taekwondo & Fitness Gopalganj</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#E50914',
+              redHover: '#B80710',
+              dark: '#0B0D13',
+              card: '#121622',
+              input: '#181E2E',
+              gold: '#F59E0B'
+            }
+          },
+          fontFamily: {
+            orbitron: ['Orbitron', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0B0D13;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-sport {
+      font-family: 'Orbitron', sans-serif;
+    }
+    .text-glow-red {
+      text-shadow: 0 0 15px rgba(229, 9, 20, 0.45);
+    }
+    .red-gradient-text {
+      background: linear-gradient(135deg, #FF4D4D 0%, #E50914 50%, #B80710 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      height: 5px;
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #E50914;
+      border-radius: 999px;
+    }
+  </style>
+
+  <!-- Firebase Modular SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJ27c7RIAwDEGAcNTYuM6BE99Hybk4mSs",
+      authDomain: "gymbaba-76a94.firebaseapp.com",
+      databaseURL: "https://gymbaba-76a94-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "gymbaba-76a94",
+      storageBucket: "gymbaba-76a94.firebasestorage.app",
+      messagingSenderId: "935622998083",
+      appId: "1:935622998083:web:924c4d307005d7c0883cf6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    window.db = db;
+    window.dbRef = ref;
+    window.dbSet = set;
+    window.dbGet = get;
+    window.dbOnValue = onValue;
+    window.dbPush = push;
+    window.dbRemove = remove;
+    window.dbUpdate = update;
+  </script>
+</head>
+<body class="selection:bg-brand-red selection:text-white">
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed top-5 right-5 z-[120] transform transition-all duration-300 translate-y-[-150%] opacity-0 pointer-events-none flex items-center space-x-3 bg-stone-900 text-white px-5 py-3.5 rounded-xl shadow-2xl border-l-4 border-brand-red">
+    <i id="toast-icon" class="fa-solid fa-circle-check text-brand-red text-lg"></i>
+    <span id="toast-msg" class="text-sm font-semibold">Notification</span>
+  </div>
+
+  <!-- Admin Verification Modal (Triple Click Logo) -->
+  <div id="admin-auth-modal" class="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-brand-card border border-brand-red/40 w-full max-w-sm rounded-2xl p-6 text-center shadow-2xl">
+      <div class="w-14 h-14 bg-brand-red/20 text-brand-red border border-brand-red/50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h3 class="font-sport text-lg font-bold text-white">Coach Portal Login</h3>
+      <p class="text-xs text-stone-400 mt-1 mb-5">Enter security PIN to manage students, fees & gallery</p>
+      
+      <input type="password" id="admin-pin-input" maxlength="8" placeholder="Enter PIN (Default: 1234)" class="w-full text-center tracking-widest text-lg font-bold py-3 px-4 border border-stone-700 rounded-xl focus:outline-none focus:border-brand-red bg-brand-input text-white mb-4">
+      
+      <div class="flex space-x-2">
+        <button type="button" onclick="closeAdminAuthModal()" class="w-1/2 py-2.5 rounded-xl text-stone-300 font-bold bg-stone-800 text-xs">Cancel</button>
+        <button type="button" onclick="verifyAdminPin()" class="w-1/2 py-2.5 rounded-xl text-white font-bold bg-brand-red hover:bg-brand-redHover text-xs transition">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Login Modal -->
+  <div id="student-login-modal" class="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-brand-card border border-stone-700 w-full max-w-sm rounded-2xl p-6 shadow-2xl relative">
+      <button onclick="closeStudentLoginModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="text-center mb-5">
+        <div class="w-12 h-12 bg-blue-600/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl">
+          <i class="fa-solid fa-id-card"></i>
+        </div>
+        <h3 class="font-sport text-lg font-bold text-white">Student Portal</h3>
+        <p class="text-xs text-stone-400">Login with registered Name/Phone & Password</p>
+      </div>
+
+      <form onsubmit="handleStudentLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Name or Phone</label>
+          <input type="text" id="stud-login-user" required placeholder="e.g. Rahul or 9876543210" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-red">
+        </div>
+        <div>
+          <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Password</label>
+          <input type="password" id="stud-login-pass" required placeholder="Enter password" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-red">
+        </div>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition">
+          <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Open My Dashboard
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Student Dashboard Modal -->
+  <div id="student-dash-modal" class="fixed inset-0 z-[105] bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+    <div class="bg-brand-card border border-stone-700 w-full max-w-xl rounded-2xl p-5 sm:p-7 shadow-2xl relative my-auto">
+      <div class="flex items-center justify-between pb-4 border-b border-stone-800">
+        <div class="flex items-center space-x-3">
+          <div id="stud-dash-avatar" class="w-12 h-12 rounded-xl bg-brand-input border border-stone-700 overflow-hidden flex items-center justify-center text-xl text-stone-400">
+            <i class="fa-solid fa-user-ninja"></i>
+          </div>
+          <div>
+            <h3 id="stud-dash-name" class="font-sport text-base sm:text-lg font-bold text-white">Student Name</h3>
+            <span id="stud-dash-belt" class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-brand-red/20 text-brand-red">White Belt</span>
+          </div>
+        </div>
+        <button onclick="logoutStudent()" class="bg-stone-800 hover:bg-stone-700 text-stone-300 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+
+      <!-- Fees Due / Paid Status Banner -->
+      <div id="stud-dash-feestatus" class="mt-4 p-4 rounded-xl bg-stone-900 border border-stone-800">
+        <!-- Live Computed Fee Status -->
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="mt-4 grid grid-cols-2 gap-3 text-center">
+        <div class="bg-brand-input p-3 rounded-xl border border-stone-800">
+          <span class="text-[10px] text-stone-400 uppercase font-bold block">Discipline</span>
+          <span id="stud-dash-discipline" class="font-bold text-sm text-white">Taekwondo</span>
+        </div>
+        <div class="bg-brand-input p-3 rounded-xl border border-stone-800">
+          <span class="text-[10px] text-stone-400 uppercase font-bold block">Days Remaining</span>
+          <span id="stud-dash-daysleft" class="font-bold text-sm text-emerald-400">30 Days</span>
+        </div>
+      </div>
+
+      <!-- Daily Attendance Action -->
+      <div class="mt-5 p-4 rounded-xl bg-gradient-to-r from-stone-900 to-brand-input border border-stone-800 flex items-center justify-between">
+        <div>
+          <div class="text-xs font-bold text-white">Daily Dojo Check-In</div>
+          <div class="text-[11px] text-stone-400">Mark your presence for today</div>
+        </div>
+        <button onclick="markStudentAttendance()" id="btn-stud-checkin" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition">
+          <i class="fa-solid fa-circle-check mr-1"></i> Check In
+        </button>
+      </div>
+
+      <!-- Community Upload Box for Student -->
+      <div class="mt-5 p-4 rounded-xl bg-stone-900 border border-stone-800">
+        <div class="text-xs font-bold text-white mb-2"><i class="fa-solid fa-camera mr-1 text-brand-red"></i> Post Photo to Academy Community</div>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input type="text" id="stud-post-caption" placeholder="Write caption (e.g. Belt exam preparation)" class="flex-1 bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+          <label class="cursor-pointer bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-xl text-xs font-bold text-center shrink-0">
+            <i class="fa-solid fa-upload mr-1"></i> Choose & Post
+            <input type="file" accept="image/*" class="hidden" onchange="uploadStudentCommunityPost(this)">
+          </label>
+        </div>
+      </div>
+
+      <div class="mt-5 text-center">
+        <button onclick="closeStudentDashModal()" class="text-xs text-stone-400 hover:text-white underline">Close Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MAIN USER APP VIEW -->
+  <!-- ============================================== -->
+  <div id="user-view" class="min-h-screen flex flex-col">
+    
+    <!-- FIXED HEADER / NAVBAR (Carefully Padded to Avoid Overflow) -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0B0D13]/95 backdrop-blur-md border-b border-stone-800/80 shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+          
+          <!-- Triple-Click Brand Logo Trigger -->
+          <div id="brand-logo-trigger" class="cursor-pointer select-none flex items-center space-x-3 py-1" title="Triple-click for coach admin panel">
+            <div id="nav-brand-logo-wrap" class="w-11 h-11 rounded-xl border border-brand-red/60 bg-brand-red/10 flex items-center justify-center text-brand-red text-xl font-bold shrink-0">
+              <i class="fa-solid fa-hand-fist"></i>
+            </div>
+            <div class="leading-tight">
+              <span id="nav-brand-title" class="font-sport text-sm sm:text-base font-extrabold text-white tracking-wider block">CHAMPIONS SPORTS ACADEMY</span>
+              <span id="nav-brand-subtitle" class="text-[10px] text-stone-400 uppercase tracking-widest font-semibold block">Gopalganj • Taekwondo & Fitness</span>
+            </div>
+          </div>
+
+          <!-- Desktop Navigation Links -->
+          <nav class="hidden lg:flex items-center space-x-7 text-xs uppercase font-bold tracking-wider text-stone-300">
+            <a href="#hero" class="hover:text-brand-red transition">Home</a>
+            <a href="#disciplines" class="hover:text-brand-red transition">Programs</a>
+            <a href="#gallery" class="hover:text-brand-red transition">Dojo Gallery</a>
+            <a href="#community" class="hover:text-brand-red transition">Student Posts</a>
+            <a href="#trial" class="hover:text-brand-red transition">Join Demo</a>
+            <a href="#contact" class="hover:text-brand-red transition">Location</a>
+          </nav>
+
+          <!-- Top Action Controls -->
+          <div class="flex items-center space-x-2.5">
+            <button onclick="openStudentLoginModal()" id="nav-student-btn" class="bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 text-blue-400 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition">
+              <i class="fa-solid fa-id-card"></i>
+              <span class="hidden sm:inline">Student</span> Login
+            </button>
+            <a id="nav-call-btn" href="tel:07079307469" class="hidden sm:inline-flex items-center space-x-1.5 bg-brand-red hover:bg-brand-redHover text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-md transition">
+              <i class="fa-solid fa-phone"></i>
+              <span id="nav-phone-display">070793 07469</span>
+            </a>
+            <button onclick="toggleMobileMenu()" class="lg:hidden text-stone-300 hover:text-white text-xl p-2">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Navigation Menu -->
+      <div id="mobile-menu" class="hidden lg:hidden bg-brand-card border-t border-stone-800 px-5 py-4 space-y-3">
+        <a href="#hero" onclick="toggleMobileMenu()" class="block text-sm font-semibold text-stone-200 hover:text-brand-red">Home</a>
+        <a href="#disciplines" onclick="toggleMobileMenu()" class="block text-sm font-semibold text-stone-200 hover:text-brand-red">Martial Arts Programs</a>
+        <a href="#gallery" onclick="toggleMobileMenu()" class="block text-sm font-semibold text-stone-200 hover:text-brand-red">Dojo Photos</a>
+        <a href="#community" onclick="toggleMobileMenu()" class="block text-sm font-semibold text-stone-200 hover:text-brand-red">Student Community Feed</a>
+        <a href="#trial" onclick="toggleMobileMenu()" class="block text-sm font-semibold text-stone-200 hover:text-brand-red">Book Free Trial</a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="block text-sm font-semibold text-stone-200 hover:text-brand-red">Contact & Dojo Map</a>
+        <div class="pt-2">
+          <a id="mobile-call-btn" href="tel:07079307469" class="block w-full text-center bg-brand-red text-white font-bold py-2.5 rounded-xl text-xs">
+            <i class="fa-solid fa-phone mr-1"></i> Call Coach Sumit
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO SECTION WITH DEDICATED TOP PADDING TO PREVENT OVERLAP -->
+    <section id="hero" class="relative pt-28 pb-16 sm:pt-32 sm:pb-24 flex items-center justify-center overflow-hidden">
+      <!-- Darkened Background with High Contrast Fallback -->
+      <div class="absolute inset-0 z-0">
+        <img id="hero-bg-img" src="https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=1920&q=80" alt="Martial Arts Dojo" class="w-full h-full object-cover object-center opacity-25 filter brightness-75">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0B0D13]/70 via-[#0B0D13]/90 to-[#0B0D13]"></div>
+      </div>
+
+      <div class="relative z-10 max-w-5xl mx-auto px-4 text-center mt-2">
+        <!-- Rating Badge -->
+        <div class="inline-flex items-center space-x-2 bg-stone-900/90 border border-stone-800 px-4 py-1.5 rounded-full text-xs font-semibold mb-6 shadow-md">
+          <span class="flex text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></span>
+          <span class="text-white">4.7 Rating (39 Reviews)</span>
+          <span class="text-stone-600">|</span>
+          <span class="text-brand-red uppercase font-bold text-[11px]">Top Sports Club in Gopalganj</span>
+        </div>
+
+        <h1 id="hero-title" class="font-sport text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight uppercase">
+          Forging Future <span class="red-gradient-text block mt-1">Martial Arts Champions</span>
+        </h1>
+
+        <p id="hero-tagline" class="text-sm sm:text-lg text-stone-300 max-w-2xl mx-auto font-normal leading-relaxed mt-4 mb-8">
+          मार्शल आर्ट और फिटनेस सेंटर गोपालगंज • ताइक्वांडो, योगा, कबड्डी, स्टंट, खो खो
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="#trial" id="hero-trial-cta-btn" class="bg-brand-red hover:bg-brand-redHover text-white font-sport text-xs sm:text-sm font-bold tracking-wider px-8 py-4 rounded-xl shadow-xl transition transform hover:-translate-y-0.5 flex items-center space-x-2 uppercase">
+            <i class="fa-solid fa-award"></i>
+            <span id="hero-trial-text">Book Free Trial Class</span>
+          </a>
+          <a id="hero-call-cta-btn" href="tel:07079307469" class="bg-brand-card hover:bg-stone-800 border border-stone-700 text-white font-sport text-xs sm:text-sm font-bold tracking-wider px-7 py-4 rounded-xl transition flex items-center space-x-2 uppercase">
+            <i class="fa-solid fa-phone text-brand-red"></i>
+            <span id="hero-call-text">Call Coach Sumit</span>
+          </a>
+        </div>
+
+        <!-- Discipline Grid Cards -->
+        <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+          <div class="bg-brand-card/90 p-4 rounded-2xl border border-stone-800">
+            <div class="text-brand-red text-2xl mb-2"><i class="fa-solid fa-medal"></i></div>
+            <div class="font-sport text-xs font-bold text-white uppercase">Taekwondo Belts</div>
+            <div class="text-[11px] text-stone-400 mt-0.5">White to Black Belt Certified</div>
+          </div>
+          <div class="bg-brand-card/90 p-4 rounded-2xl border border-stone-800">
+            <div class="text-amber-400 text-2xl mb-2"><i class="fa-solid fa-person-running"></i></div>
+            <div class="font-sport text-xs font-bold text-white uppercase">Athletic Fitness</div>
+            <div class="text-[11px] text-stone-400 mt-0.5">Police & Army Physical Prep</div>
+          </div>
+          <div class="bg-brand-card/90 p-4 rounded-2xl border border-stone-800">
+            <div class="text-emerald-400 text-2xl mb-2"><i class="fa-solid fa-spa"></i></div>
+            <div class="font-sport text-xs font-bold text-white uppercase">Yoga & Flexibility</div>
+            <div class="text-[11px] text-stone-400 mt-0.5">Mental focus & Core strength</div>
+          </div>
+          <div class="bg-brand-card/90 p-4 rounded-2xl border border-stone-800">
+            <div class="text-blue-400 text-2xl mb-2"><i class="fa-solid fa-shield-cat"></i></div>
+            <div class="font-sport text-xs font-bold text-white uppercase">Self Defense & Stunts</div>
+            <div class="text-[11px] text-stone-400 mt-0.5">Combat safety for all ages</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISCIPLINES SECTION WITH SAFE FALLBACK IMAGES -->
+    <section id="disciplines" class="py-16 bg-[#0E111A] border-t border-stone-800/60">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Training Curriculums</span>
+          <h2 class="font-sport text-2xl sm:text-3xl font-extrabold text-white mt-1">Disciplines We Master</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-brand-card rounded-2xl overflow-hidden border border-stone-800 hover:border-brand-red/40 transition">
+            <div class="h-48 bg-stone-900 overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=700&q=80" alt="Taekwondo Training" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=700&q=80'">
+            </div>
+            <div class="p-5">
+              <h3 class="font-sport text-base font-bold text-white">Taekwondo & Sparring</h3>
+              <p class="text-xs text-stone-400 mt-2 leading-relaxed">Olympic-standard kicks, poomsae forms, and competition fighting tactics under experienced coaches.</p>
+            </div>
+          </div>
+
+          <div class="bg-brand-card rounded-2xl overflow-hidden border border-stone-800 hover:border-brand-red/40 transition">
+            <div class="h-48 bg-stone-900 overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=700&q=80" alt="Yoga and Acrobatic Stunts" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=700&q=80'">
+            </div>
+            <div class="p-5">
+              <h3 class="font-sport text-base font-bold text-white">Yoga, Tumbling & Stunts</h3>
+              <p class="text-xs text-stone-400 mt-2 leading-relaxed">Full body agility, backflips, floor acrobatics, and joint mobility conditioning for martial artists.</p>
+            </div>
+          </div>
+
+          <div class="bg-brand-card rounded-2xl overflow-hidden border border-stone-800 hover:border-brand-red/40 transition">
+            <div class="h-48 bg-stone-900 overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=700&q=80" alt="Kabaddi & Athletics" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=700&q=80'">
+            </div>
+            <div class="p-5">
+              <h3 class="font-sport text-base font-bold text-white">Kabaddi, Kho-Kho & Endurance</h3>
+              <p class="text-xs text-stone-400 mt-2 leading-relaxed">Raid mechanics, ankle-hold drills, stamina building, and state tournament tournament readiness.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE GALLERY SECTION (FROM FIREBASE) -->
+    <section id="gallery" class="py-16 bg-[#0B0D13]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Dojo Moments</span>
+          <h2 class="font-sport text-2xl sm:text-3xl font-extrabold text-white mt-1">Dojo & Training Gallery</h2>
+        </div>
+
+        <div id="user-gallery-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <!-- Dynamically Populated From Firebase -->
+          <div class="col-span-full py-12 text-center text-stone-500 border border-dashed border-stone-800 rounded-2xl">
+            <i class="fa-regular fa-images text-3xl mb-2 text-stone-600 block"></i>
+            <span>No gallery photos added yet. Coaches can upload via the admin console.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY FEED SECTION (WHERE STUDENTS POST PHOTO & ADM EDIT/DELETE) -->
+    <section id="community" class="py-16 bg-[#0E111A] border-t border-stone-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
+          <div>
+            <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Academy Life</span>
+            <h2 class="font-sport text-2xl font-extrabold text-white">Student Community Posts</h2>
+          </div>
+          <button onclick="openStudentLoginModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition">
+            <i class="fa-solid fa-camera"></i>
+            <span>Login To Post Photo</span>
+          </button>
+        </div>
+
+        <div id="user-feed-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="col-span-full py-8 text-center text-stone-500 border border-dashed border-stone-800 rounded-2xl">
+            <span>No community posts yet. Students can log in to share training photos!</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING & TRIAL INQUIRY SECTION -->
+    <section id="trial" class="py-16 bg-gradient-to-b from-[#0B0D13] to-[#121622] border-t border-stone-800">
+      <div class="max-w-3xl mx-auto px-4">
+        <div class="bg-brand-card p-6 sm:p-10 rounded-3xl border border-stone-700 shadow-2xl">
+          <div class="text-center mb-8">
+            <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Step Onto The Mat</span>
+            <h2 class="font-sport text-2xl sm:text-3xl font-extrabold text-white mt-1">Book Your Trial Class</h2>
+            <p class="text-xs text-stone-400 mt-2">Attend a demo training session with Coach Sumit Sharma at our Gopalganj academy.</p>
+          </div>
+
+          <form onsubmit="handleInquirySubmit(event)" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Student Full Name *</label>
+                <input type="text" id="inq-name" required placeholder="e.g. Aman Kumar" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-red">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Contact Phone Number *</label>
+                <input type="tel" id="inq-phone" required placeholder="e.g. 09876543210" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-red">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Preferred Program</label>
+                <select id="inq-program" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-red">
+                  <option value="Taekwondo Martial Arts">Taekwondo Martial Arts</option>
+                  <option value="Yoga & Flexibility">Yoga & Flexibility</option>
+                  <option value="Kabaddi & Athletics">Kabaddi & Athletics</option>
+                  <option value="Acrobatics & Stunts">Acrobatics & Stunts</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Preferred Demo Date</label>
+                <input type="date" id="inq-date" required class="w-full bg-brand-input border border-stone-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-red">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Notes / Experience</label>
+              <textarea id="inq-msg" rows="2" placeholder="Mention age, prior sports background or specific fitness goals..." class="w-full bg-brand-input border border-stone-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-brand-red"></textarea>
+            </div>
+
+            <div class="pt-2 text-center">
+              <button type="submit" id="btn-submit-inquiry" class="w-full sm:w-auto bg-brand-red hover:bg-brand-redHover text-white font-sport text-xs font-bold px-8 py-3.5 rounded-xl uppercase tracking-wider transition shadow-lg">
+                <i class="fa-solid fa-paper-plane mr-1.5"></i> Submit Demo Request
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT & LOCATION -->
+    <section id="contact" class="py-16 bg-[#0B0D13] border-t border-stone-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-4">
+            <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Direct Access</span>
+            <h2 class="font-sport text-2xl font-bold text-white">Academy Location & Hours</h2>
+            <div class="space-y-3 pt-2">
+              <div class="p-3.5 rounded-xl bg-brand-card border border-stone-800 flex items-start space-x-3">
+                <i class="fa-solid fa-location-dot text-brand-red text-base mt-0.5"></i>
+                <div class="text-xs">
+                  <strong class="text-stone-300 block">Dojo Address:</strong>
+                  <span id="contact-address-text">Barnwal dharmshala, Banakata, Gopalganj, Bihar 841428</span>
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-brand-card border border-stone-800 flex items-start space-x-3">
+                <i class="fa-solid fa-phone text-brand-red text-base mt-0.5"></i>
+                <div class="text-xs">
+                  <strong class="text-stone-300 block">Direct Hotline:</strong>
+                  <a id="contact-phone-link" href="tel:07079307469" class="text-brand-red font-bold hover:underline">070793 07469</a>
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-brand-card border border-stone-800 flex items-start space-x-3">
+                <i class="fa-brands fa-instagram text-pink-500 text-base mt-0.5"></i>
+                <div class="text-xs">
+                  <strong class="text-stone-300 block">Coach Instagram:</strong>
+                  <a id="contact-insta-link" href="https://www.instagram.com/sumit_sharma2819" target="_blank" class="text-stone-200 hover:text-pink-400 font-bold">@sumit_sharma2819</a>
+                </div>
+              </div>
+            </div>
+            <div class="pt-2 flex flex-wrap gap-3">
+              <a id="contact-map-btn" href="https://maps.app.goo.gl/6HV7Uy5ttU7XHwRi8" target="_blank" class="bg-brand-red hover:bg-brand-redHover text-white px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-diamond-turn-right"></i>
+                <span>Get Directions</span>
+              </a>
+              <a id="contact-wa-btn" href="https://wa.me/917079307469" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span>WhatsApp Coach</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="h-80 bg-stone-900 rounded-3xl overflow-hidden border border-stone-800 shadow-xl">
+            <iframe 
+              title="Academy Map Location"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3575.529327891398!2d84.4400!3d26.4670!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDI4JzAxLjIiTiA4NMKwMjYnMjQuMCJF!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" 
+              class="w-full h-full border-0" 
+              loading="lazy">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#07080D] py-8 border-t border-stone-900 text-stone-500 text-xs">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-hand-fist text-brand-red"></i>
+          <span class="font-sport font-bold text-stone-300">CHAMPIONS SPORTS ACADEMY GOPALGANJ</span>
+        </div>
+        <div>&copy; 2026 Sumit Sharma. All Rights Reserved.</div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ============================================== -->
+  <!-- ADMIN MANAGEMENT PANEL (COACH CONSOLE) -->
+  <!-- ============================================== -->
+  <div id="admin-view" class="hidden min-h-screen bg-[#0B0D13] flex flex-col">
+    
+    <!-- Admin Bar with BACK TO HOME BUTTON -->
+    <header class="bg-brand-card border-b border-stone-800 px-4 sm:px-8 py-3.5 sticky top-0 z-40 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-brand-red text-white flex items-center justify-center font-bold">
+          <i class="fa-solid fa-gauge-high"></i>
+        </div>
+        <div>
+          <h2 class="font-sport text-sm font-bold text-white tracking-wide">Coach Admin Dashboard</h2>
+          <span class="text-[10px] text-emerald-400 font-semibold">Live System Synced</span>
+        </div>
+      </div>
+
+      <!-- Safe Back to Home Website Button -->
+      <button onclick="exitAdminPanel()" class="bg-stone-800 hover:bg-stone-700 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition border border-stone-700">
+        <i class="fa-solid fa-house"></i>
+        <span>Back to Home Website</span>
+      </button>
+    </header>
+
+    <!-- Admin Body Tabs -->
+    <div class="max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6 flex-1">
+      
+      <!-- Tab Buttons Scroll Bar -->
+      <div class="flex gap-2 overflow-x-auto pb-2 custom-scroll">
+        <button onclick="switchAdminTab('tab-overview', this)" class="admin-tab-btn active px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-red text-white flex items-center space-x-1.5 shrink-0">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Overview & Due Fees</span>
+        </button>
+        <button onclick="switchAdminTab('tab-students', this)" class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-card text-stone-400 hover:text-white flex items-center space-x-1.5 shrink-0">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>Add / Manage Students</span>
+        </button>
+        <button onclick="switchAdminTab('tab-attendance', this)" class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-card text-stone-400 hover:text-white flex items-center space-x-1.5 shrink-0">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>Attendance Ledger</span>
+        </button>
+        <button onclick="switchAdminTab('tab-gallery', this)" class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-card text-stone-400 hover:text-white flex items-center space-x-1.5 shrink-0">
+          <i class="fa-solid fa-images"></i>
+          <span>Dojo Gallery</span>
+        </button>
+        <button onclick="switchAdminTab('tab-feed-mod', this)" class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-card text-stone-400 hover:text-white flex items-center space-x-1.5 shrink-0">
+          <i class="fa-solid fa-camera-retro"></i>
+          <span>Community Feed Manager</span>
+        </button>
+        <button onclick="switchAdminTab('tab-settings', this)" class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-card text-stone-400 hover:text-white flex items-center space-x-1.5 shrink-0">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Academy Settings & Buttons</span>
+        </button>
+      </div>
+
+      <!-- ================= 1. OVERVIEW & DUE FEES TAB ================= -->
+      <div id="tab-overview" class="admin-pane space-y-5">
+        <!-- Metric Banner -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="bg-brand-card p-4 rounded-2xl border border-stone-800 text-center">
+            <h3 id="stat-total-students" class="font-sport text-2xl font-bold text-brand-red">0</h3>
+            <p class="text-[10px] uppercase font-bold text-stone-400 mt-1">Total Enrolled</p>
+          </div>
+          <div class="bg-brand-card p-4 rounded-2xl border border-stone-800 text-center">
+            <h3 id="stat-active-students" class="font-sport text-2xl font-bold text-emerald-400">0</h3>
+            <p class="text-[10px] uppercase font-bold text-stone-400 mt-1">Active Membership</p>
+          </div>
+          <div class="bg-brand-card p-4 rounded-2xl border border-stone-800 text-center">
+            <h3 id="stat-due-count" class="font-sport text-2xl font-bold text-amber-400">0</h3>
+            <p class="text-[10px] uppercase font-bold text-stone-400 mt-1">Pending Fees Count</p>
+          </div>
+          <div class="bg-brand-card p-4 rounded-2xl border border-stone-800 text-center">
+            <h3 id="stat-due-amount" class="font-sport text-2xl font-bold text-rose-500">₹0</h3>
+            <p class="text-[10px] uppercase font-bold text-stone-400 mt-1">Total Fee Due (बकाया)</p>
+          </div>
+        </div>
+
+        <!-- Student Search & Filters -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-stone-500 text-xs"></i>
+            <input type="text" id="admin-search-input" oninput="renderOverviewLists()" placeholder="Search trainee by name, phone or belt..." class="w-full bg-brand-card border border-stone-800 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-red">
+          </div>
+          <div class="flex gap-2">
+            <button onclick="setOverviewFilter('All')" id="btn-filter-all" class="filter-pill active px-4 py-2 rounded-xl text-xs font-bold bg-brand-red text-white">All</button>
+            <button onclick="setOverviewFilter('Due')" id="btn-filter-due" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold bg-brand-card text-stone-400 hover:text-white">Fee Due (बकाया)</button>
+            <button onclick="setOverviewFilter('Active')" id="btn-filter-active" class="filter-pill px-4 py-2 rounded-xl text-xs font-bold bg-brand-card text-stone-400 hover:text-white">Active Only</button>
+          </div>
+        </div>
+
+        <!-- Trainee Cards List -->
+        <div id="overview-students-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Populated Live From Firebase -->
+        </div>
+      </div>
+
+      <!-- ================= 2. ADD & MANAGE STUDENTS TAB ================= -->
+      <div id="tab-students" class="admin-pane hidden space-y-6">
+        <div class="bg-brand-card p-6 rounded-2xl border border-stone-800">
+          <h3 id="form-student-title" class="font-sport text-base font-bold text-white mb-4">Register New Student</h3>
+          <input type="hidden" id="edit-student-id">
+
+          <form onsubmit="handleSaveStudent(event)" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Student Name *</label>
+                <input type="text" id="stud-name" required placeholder="e.g. Rahul Singh" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Login Password *</label>
+                <input type="text" id="stud-pass" required placeholder="Create login password" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Phone Number *</label>
+                <input type="tel" id="stud-phone" required placeholder="10-digit number" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Belt Ranking</label>
+                <select id="stud-belt" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+                  <option value="White Belt">White Belt (शुरुआती)</option>
+                  <option value="Yellow Belt">Yellow Belt</option>
+                  <option value="Green Belt">Green Belt</option>
+                  <option value="Blue Belt">Blue Belt</option>
+                  <option value="Red Belt">Red Belt</option>
+                  <option value="Black Belt 1st Dan">Black Belt 1st Dan (मास्टर)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Discipline Program</label>
+                <select id="stud-discipline" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+                  <option value="Taekwondo Martial Arts">Taekwondo Martial Arts</option>
+                  <option value="Yoga & Flexibility">Yoga & Flexibility</option>
+                  <option value="Kabaddi / Kho-Kho">Kabaddi / Kho-Kho</option>
+                  <option value="Acrobatics & Stunts">Acrobatics & Stunts</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Admission / Join Date</label>
+                <input type="date" id="stud-joindate" required class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+              </div>
+            </div>
+
+            <!-- DURATION & FEE DUE SYSTEM -->
+            <div class="p-4 rounded-xl bg-stone-900 border border-stone-800 space-y-4">
+              <div class="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+                <i class="fa-solid fa-indian-rupee-sign text-amber-400"></i>
+                <span>Fee Collection & Due Amount Tracking</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div>
+                  <label class="block text-[10px] uppercase font-bold text-stone-400 mb-1">Plan Duration</label>
+                  <select id="stud-months" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+                    <option value="1">1 Month (30 Days)</option>
+                    <option value="2">2 Months</option>
+                    <option value="3">3 Months</option>
+                    <option value="6">6 Months</option>
+                    <option value="12">1 Year (12 Months)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[10px] uppercase font-bold text-stone-400 mb-1">Fee Payment Status</label>
+                  <select id="stud-feestatus" onchange="toggleFeeDueFields()" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+                    <option value="Paid">Fully Paid (कोई बकाया नहीं)</option>
+                    <option value="Due">Due / Pay Later (फीस बकाया है)</option>
+                    <option value="Partial">Partial (आधा दिया / बाकी)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[10px] uppercase font-bold text-stone-400 mb-1">Due Amount (बकाया ₹)</label>
+                  <input type="number" id="stud-dueamount" placeholder="0" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+                </div>
+                <div>
+                  <label class="block text-[10px] uppercase font-bold text-stone-400 mb-1">Due Since Date</label>
+                  <input type="date" id="stud-duedate" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Photo via ImgBB -->
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Profile Photo (Upload via ImgBB)</label>
+              <div class="flex gap-2">
+                <input type="url" id="stud-photo-url" placeholder="Paste image URL or upload photo" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-red">
+                <label class="cursor-pointer bg-stone-800 hover:bg-stone-700 text-white px-4 py-2 rounded-xl text-xs font-bold border border-stone-700 shrink-0 flex items-center space-x-1">
+                  <i class="fa-solid fa-camera"></i>
+                  <span>Upload</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="uploadImageToImgbb(this.files[0], (url) => { document.getElementById('stud-photo-url').value = url; showToast('Student photo uploaded!'); })">
+                </label>
+              </div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+              <button type="submit" class="bg-brand-red hover:bg-brand-redHover text-white font-bold py-2.5 px-6 rounded-xl text-xs shadow-md transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span id="btn-save-stud-text">Save Student Profile</span>
+              </button>
+              <button type="button" id="btn-cancel-stud-edit" onclick="resetStudentForm()" class="hidden bg-stone-800 hover:bg-stone-700 text-stone-300 font-bold py-2.5 px-4 rounded-xl text-xs transition">
+                Cancel Edit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ================= 3. ATTENDANCE LEDGER TAB ================= -->
+      <div id="tab-attendance" class="admin-pane hidden space-y-4">
+        <div class="bg-brand-card p-6 rounded-2xl border border-stone-800">
+          <div class="flex flex-col sm:flex-row items-center justify-between pb-4 border-b border-stone-800 gap-3">
+            <div>
+              <h3 class="font-sport text-base font-bold text-white">Daily Dojo Attendance</h3>
+              <p class="text-xs text-stone-400">View check-ins logged by students or mark them manually</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <input type="date" id="att-filter-date" onchange="loadAttendanceForDate()" class="bg-brand-input border border-stone-700 rounded-xl px-3 py-1.5 text-xs text-white">
+              <button onclick="setAttendanceToday()" class="bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-bold px-3 py-2 rounded-xl">Today</button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto mt-4">
+            <table class="w-full text-left text-xs text-stone-300">
+              <thead class="bg-stone-900 uppercase text-[10px] text-stone-400 font-bold">
+                <tr>
+                  <th class="py-3 px-4">Student</th>
+                  <th class="py-3 px-4">Belt</th>
+                  <th class="py-3 px-4">Check-in Time</th>
+                  <th class="py-3 px-4">Status</th>
+                </tr>
+              </thead>
+              <tbody id="attendance-table-body" class="divide-y divide-stone-800">
+                <tr><td colspan="4" class="py-8 text-center text-stone-500">Select date to see attendance.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 4. DOJO GALLERY TAB ================= -->
+      <div id="tab-gallery" class="admin-pane hidden space-y-5">
+        <div class="bg-brand-card p-6 rounded-2xl border border-stone-800">
+          <h3 class="font-sport text-base font-bold text-white mb-2">Upload Photo to Dojo Gallery</h3>
+          <p class="text-xs text-stone-400 mb-4">Choose image file (directly uploaded to ImgBB) and save to website gallery.</p>
+
+          <form onsubmit="handleGalleryAdd(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+            <div class="sm:col-span-4">
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Caption / Title</label>
+              <input type="text" id="gal-new-caption" required placeholder="e.g. Taekwondo Sparring Drill" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+            <div class="sm:col-span-5">
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Image URL or File</label>
+              <div class="flex gap-2">
+                <input type="url" id="gal-new-url" placeholder="Image URL or upload" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+                <label class="cursor-pointer bg-stone-800 hover:bg-stone-700 text-white px-3 py-2 rounded-xl text-xs font-bold border border-stone-700 shrink-0">
+                  <i class="fa-solid fa-upload"></i>
+                  <input type="file" accept="image/*" class="hidden" onchange="uploadImageToImgbb(this.files[0], (url) => { document.getElementById('gal-new-url').value = url; showToast('Photo uploaded!'); })">
+                </label>
+              </div>
+            </div>
+            <div class="sm:col-span-3">
+              <button type="submit" class="w-full bg-brand-red hover:bg-brand-redHover text-white font-bold py-2.5 rounded-xl text-xs transition">
+                <i class="fa-solid fa-plus mr-1"></i> Add to Gallery
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-brand-card p-6 rounded-2xl border border-stone-800">
+          <h4 class="font-sport text-sm font-bold text-white mb-4">Manage Gallery Photos (<span id="admin-gallery-count">0</span>)</h4>
+          <div id="admin-gallery-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <!-- Populated from Firebase -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 5. COMMUNITY FEED MODERATOR TAB ================= -->
+      <div id="tab-feed-mod" class="admin-pane hidden space-y-5">
+        <div class="bg-brand-card p-6 rounded-2xl border border-stone-800">
+          <h3 class="font-sport text-base font-bold text-white mb-2">Community Feed Posts & Student Uploads</h3>
+          <p class="text-xs text-stone-400 mb-4">Edit captions, change images, or delete unwanted posts shared by students.</p>
+
+          <div id="admin-feed-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <!-- Populated from Firebase -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 6. ACADEMY SETTINGS & CTA TAB ================= -->
+      <div id="tab-settings" class="admin-pane hidden space-y-5">
+        <div class="bg-brand-card p-6 rounded-2xl border border-stone-800">
+          <div class="flex items-center justify-between pb-4 border-b border-stone-800 mb-5">
+            <div>
+              <h3 class="font-sport text-base font-bold text-white">Academy Information & CTA Wording</h3>
+              <p class="text-xs text-stone-400">Change phone, address, and edit the trial & call buttons anytime.</p>
+            </div>
+            <button onclick="saveAcademySettings()" class="bg-brand-red hover:bg-brand-redHover text-white font-bold px-5 py-2 rounded-xl text-xs transition">
+              <i class="fa-solid fa-floppy-disk mr-1"></i> Save Changes
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Academy Name</label>
+              <input type="text" id="set-name" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Tagline / Subtitle</label>
+              <input type="text" id="set-tagline" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Primary Phone Number</label>
+              <input type="text" id="set-phone" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">WhatsApp Number (e.g. 917079307469)</label>
+              <input type="text" id="set-whatsapp" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+
+            <!-- DYNAMIC EDITABLE CTA BUTTON TEXTS -->
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-amber-400 mb-1">Trial / Booking CTA Button Text</label>
+              <input type="text" id="set-trialcta" placeholder="Book Free Trial Class" class="w-full bg-brand-input border border-amber-500/50 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-amber-400 mb-1">Call Coach CTA Button Text</label>
+              <input type="text" id="set-callcta" placeholder="Call Coach Sumit" class="w-full bg-brand-input border border-amber-500/50 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Physical Address</label>
+              <input type="text" id="set-address" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Coach Instagram Profile Link</label>
+              <input type="url" id="set-insta" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-[11px] uppercase font-bold text-stone-400 mb-1">Google Maps Direct Link</label>
+              <input type="url" id="set-maplink" class="w-full bg-brand-input border border-stone-700 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT ENGINE -->
+  <script>
+    const IMGBB_API_KEY = "8104f8ac745d8dc4621b9d758844b418";
+    const DEFAULT_PIN = "1234";
+
+    let stateSettings = {
+      name: "CHAMPIONS SPORTS ACADEMY",
+      tagline: "मार्शल आर्ट और फिटनेस सेंटर गोपालगंज • ताइक्वांडो, योगा, कबड्डी, स्टंट, खो खो",
+      phone: "070793 07469",
+      whatsapp: "917079307469",
+      address: "Barnwal dharmshala, Banakata, Gopalganj, Bihar 841428",
+      trialCtaText: "Book Free Trial Class",
+      callCtaText: "Call Coach Sumit",
+      instagramUrl: "https://www.instagram.com/sumit_sharma2819",
+      mapUrl: "https://maps.app.goo.gl/6HV7Uy5ttU7XHwRi8"
+    };
+
+    let allStudents = {};
+    let allGallery = {};
+    let allFeed = {};
+    let currentOverviewFilter = 'All';
+    let currentLoggedStudent = null;
+
+    // Toast Messenger
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      const m = document.getElementById('toast-msg');
+      const i = document.getElementById('toast-icon');
+      m.innerText = msg;
+      if (isError) {
+        i.className = "fa-solid fa-triangle-exclamation text-rose-500 text-lg";
+        t.className = t.className.replace('border-brand-red', 'border-rose-500');
+      } else {
+        i.className = "fa-solid fa-circle-check text-brand-red text-lg";
+        t.className = t.className.replace('border-rose-500', 'border-brand-red');
+      }
+      t.classList.remove('translate-y-[-150%]', 'opacity-0');
+      t.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        t.classList.remove('translate-y-0', 'opacity-100');
+        t.classList.add('translate-y-[-150%]', 'opacity-0');
+      }, 3500);
+    }
+
+    // Triple Click Coach Admin Trigger
+    let clickCount = 0;
+    let clickTimer = null;
+    const logoTrigger = document.getElementById('brand-logo-trigger');
+    if (logoTrigger) {
+      logoTrigger.addEventListener('click', () => {
+        clickCount++;
+        clearTimeout(clickTimer);
+        if (clickCount === 3) {
+          clickCount = 0;
+          openAdminAuthModal();
+        } else {
+          clickTimer = setTimeout(() => { clickCount = 0; }, 600);
+        }
+      });
+    }
+
+    function openAdminAuthModal() {
+      document.getElementById('admin-auth-modal').classList.remove('hidden');
+      document.getElementById('admin-pin-input').value = "";
+      setTimeout(() => document.getElementById('admin-pin-input').focus(), 100);
+    }
+
+    function closeAdminAuthModal() {
+      document.getElementById('admin-auth-modal').classList.add('hidden');
+    }
+
+    function verifyAdminPin() {
+      const pin = document.getElementById('admin-pin-input').value.trim();
+      if (pin === DEFAULT_PIN || pin === "admin" || pin === "70793") {
+        closeAdminAuthModal();
+        openAdminPanel();
+        showToast("Coach Portal unlocked!");
+      } else {
+        showToast("Incorrect security PIN!", true);
+      }
+    }
+
+    document.getElementById('admin-pin-input')?.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') verifyAdminPin();
+    });
+
+    function openAdminPanel() {
+      document.getElementById('user-view').classList.add('hidden');
+      document.getElementById('admin-view').classList.remove('hidden');
+      window.scrollTo(0, 0);
+      populateAdminSettings();
+    }
+
+    function exitAdminPanel() {
+      document.getElementById('admin-view').classList.add('hidden');
+      document.getElementById('user-view').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+
+    function switchAdminTab(tabId, btn) {
+      document.querySelectorAll('.admin-tab-btn').forEach(b => {
+        b.classList.remove('bg-brand-red', 'text-white');
+        b.classList.add('bg-brand-card', 'text-stone-400');
+      });
+      btn.classList.remove('bg-brand-card', 'text-stone-400');
+      btn.classList.add('bg-brand-red', 'text-white');
+
+      document.querySelectorAll('.admin-pane').forEach(p => p.classList.add('hidden'));
+      document.getElementById(tabId)?.classList.remove('hidden');
+      if (tabId === 'tab-attendance') setAttendanceToday();
+    }
+
+    // Direct ImgBB File Upload
+    async function uploadImageToImgbb(file, onSuccess) {
+      if (!file) return;
+      showToast("Uploading photo to ImgBB...");
+      const formData = new FormData();
+      formData.append("image", file);
+      try {
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        if (data.success && data.data && data.data.url) {
+          onSuccess(data.data.url);
+        } else {
+          showToast("Upload failed: " + (data.error?.message || "Error"), true);
+        }
+      } catch (e) {
+        showToast("Network upload error.", true);
+      }
+    }
+
+    // FIREBASE SYNC ENGINE
+    function initFirebaseSync() {
+      if (!window.db) {
+        setTimeout(initFirebaseSync, 300);
+        return;
+      }
+      const { db, dbRef, dbOnValue, dbSet } = window;
+
+      // 1. Settings
+      dbOnValue(dbRef(db, 'academy_settings'), (snap) => {
+        const val = snap.val();
+        if (val) stateSettings = { ...stateSettings, ...val };
+        else dbSet(dbRef(db, 'academy_settings'), stateSettings);
+        applySettingsToUI();
+      });
+
+      // 2. Students
+      dbOnValue(dbRef(db, 'academy_students'), (snap) => {
+        allStudents = snap.val() || {};
+        renderOverviewLists();
+      });
+
+      // 3. Gallery
+      dbOnValue(dbRef(db, 'academy_gallery'), (snap) => {
+        allGallery = snap.val() || {};
+        renderGallery();
+      });
+
+      // 4. Community Feed
+      dbOnValue(dbRef(db, 'academy_feed'), (snap) => {
+        allFeed = snap.val() || {};
+        renderCommunityFeed();
+      });
+    }
+
+    function applySettingsToUI() {
+      const s = stateSettings;
+      document.getElementById('nav-brand-title').innerText = s.name.toUpperCase();
+      document.getElementById('nav-brand-subtitle').innerText = s.tagline;
+      document.getElementById('hero-tagline').innerText = s.tagline;
+
+      // Dynamic CTA Buttons Text
+      document.getElementById('hero-trial-text').innerText = s.trialCtaText || "Book Free Trial Class";
+      document.getElementById('hero-call-text').innerText = s.callCtaText || "Call Coach Sumit";
+
+      document.getElementById('nav-phone-display').innerText = s.phone;
+      document.getElementById('nav-call-btn').href = 'tel:' + s.phone.replace(/\s+/g, '');
+      document.getElementById('hero-call-cta-btn').href = 'tel:' + s.phone.replace(/\s+/g, '');
+      document.getElementById('contact-phone-link').innerText = s.phone;
+      document.getElementById('contact-phone-link').href = 'tel:' + s.phone.replace(/\s+/g, '');
+
+      document.getElementById('contact-address-text').innerText = s.address;
+      document.getElementById('contact-insta-link').href = s.instagramUrl;
+      document.getElementById('contact-map-btn').href = s.mapUrl;
+      document.getElementById('contact-wa-btn').href = `https://wa.me/${s.whatsapp.replace(/\+/g, '').replace(/\s+/g, '')}`;
+    }
+
+    // Fee Due Helper Calculations
+    function getDueDays(dueSinceDate) {
+      if (!dueSinceDate) return 0;
+      const d = new Date(dueSinceDate);
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      d.setHours(0,0,0,0);
+      const diff = Math.floor((today - d) / (1000 * 60 * 60 * 24));
+      return diff > 0 ? diff : 0;
+    }
+
+    function renderOverviewLists() {
+      const keys = Object.keys(allStudents);
+      const query = (document.getElementById('admin-search-input')?.value || '').trim().toLowerCase();
+      const container = document.getElementById('overview-students-list');
+
+      let totalCount = keys.length;
+      let activeCount = 0;
+      let dueCount = 0;
+      let totalDueSum = 0;
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      keys.forEach(k => {
+        const st = allStudents[k];
+        const expDate = st.expiryDate ? new Date(st.expiryDate) : null;
+        const isActive = expDate && (expDate >= today);
+        if (isActive) activeCount++;
+
+        const isDue = (st.feeStatus === 'Due' || st.feeStatus === 'Partial' || Number(st.dueAmount) > 0);
+        if (isDue) {
+          dueCount++;
+          totalDueSum += (Number(st.dueAmount) || 0);
+        }
+      });
+
+      document.getElementById('stat-total-students').innerText = totalCount;
+      document.getElementById('stat-active-students').innerText = activeCount;
+      document.getElementById('stat-due-count').innerText = dueCount;
+      document.getElementById('stat-due-amount').innerText = `₹${totalDueSum}`;
+
+      if (!container) return;
+
+      let html = '';
+      keys.forEach(k => {
+        const st = allStudents[k];
+        const nameMatch = (st.name || '').toLowerCase().includes(query);
+        const phoneMatch = (st.phone || '').includes(query);
+        const beltMatch = (st.belt || '').toLowerCase().includes(query);
+        if (!nameMatch && !phoneMatch && !beltMatch) return;
+
+        const isDue = (st.feeStatus === 'Due' || st.feeStatus === 'Partial' || Number(st.dueAmount) > 0);
+        if (currentOverviewFilter === 'Due' && !isDue) return;
+        if (currentOverviewFilter === 'Active' && st.expiryDate && new Date(st.expiryDate) < today) return;
+
+        const dueDays = getDueDays(st.dueSince);
+
+        html += `
+          <div class="bg-brand-card p-4 rounded-2xl border ${isDue ? 'border-rose-500/40 bg-gradient-to-b from-brand-card to-rose-950/20' : 'border-stone-800'} relative">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3">
+                <img src="${st.photo || 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=150&q=80'}" class="w-11 h-11 rounded-xl object-cover border border-stone-700">
+                <div>
+                  <h4 class="font-sport text-sm font-bold text-white">${st.name}</h4>
+                  <p class="text-[11px] text-stone-400"><i class="fa-solid fa-phone mr-1"></i>${st.phone}</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded ${isDue ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'}">
+                ${isDue ? 'Fee Due' : 'Paid'}
+              </span>
+            </div>
+
+            <div class="mt-3 pt-3 border-t border-stone-800 grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="text-[10px] text-stone-500 block">Rank</span>
+                <strong class="text-stone-200">${st.belt || 'White Belt'}</strong>
+              </div>
+              <div>
+                <span class="text-[10px] text-stone-500 block">Pass</span>
+                <strong class="text-stone-200">${st.password || '1234'}</strong>
+              </div>
+            </div>
+
+            ${isDue ? `
+              <div class="mt-2.5 p-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs">
+                <div class="flex justify-between font-bold text-rose-400">
+                  <span>बकाया फीस:</span>
+                  <span>₹${st.dueAmount || 0}</span>
+                </div>
+                <div class="text-[10px] text-stone-400 mt-0.5">
+                  <i class="fa-solid fa-clock-rotate-left mr-1"></i> ${dueDays} दिनों से बकाया है
+                </div>
+              </div>
+            ` : ''}
+
+            <div class="mt-3 flex gap-2">
+              <button onclick="editStudent('${k}')" class="flex-1 bg-stone-800 hover:bg-stone-700 text-stone-200 font-bold py-1.5 rounded-lg text-xs">
+                <i class="fa-solid fa-pen mr-1"></i> Edit
+              </button>
+              <button onclick="deleteStudent('${k}')" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 font-bold px-3 py-1.5 rounded-lg text-xs">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html || '<div class="col-span-full py-8 text-center text-stone-500">No matching student records found.</div>';
+    }
+
+    function setOverviewFilter(filter) {
+      currentOverviewFilter = filter;
+      document.querySelectorAll('.filter-pill').forEach(b => {
+        b.classList.remove('bg-brand-red', 'text-white');
+        b.classList.add('bg-brand-card', 'text-stone-400');
+      });
+      const activeBtn = document.getElementById('btn-filter-' + filter.toLowerCase());
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-brand-card', 'text-stone-400');
+        activeBtn.classList.add('bg-brand-red', 'text-white');
+      }
+      renderOverviewLists();
+    }
+
+    // STUDENT ADD / EDIT LOGIC
+    function toggleFeeDueFields() {
+      const status = document.getElementById('stud-feestatus').value;
+      const dueInput = document.getElementById('stud-dueamount');
+      const dateInput = document.getElementById('stud-duedate');
+      if (status === 'Paid') {
+        dueInput.value = '0';
+      }
+    }
+
+    async function handleSaveStudent(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-student-id').value;
+      const name = document.getElementById('stud-name').value.trim();
+      const pass = document.getElementById('stud-pass').value.trim();
+      const phone = document.getElementById('stud-phone').value.trim();
+      const belt = document.getElementById('stud-belt').value;
+      const discipline = document.getElementById('stud-discipline').value;
+      const joinDate = document.getElementById('stud-joindate').value;
+      const months = parseInt(document.getElementById('stud-months').value) || 1;
+      const feeStatus = document.getElementById('stud-feestatus').value;
+      const dueAmount = document.getElementById('stud-dueamount').value.trim() || '0';
+      const dueSince = document.getElementById('stud-duedate').value || joinDate;
+      const photo = document.getElementById('stud-photo-url').value.trim();
+
+      const exp = new Date(joinDate);
+      exp.setMonth(exp.getMonth() + months);
+
+      const payload = {
+        name, password: pass, phone, belt, discipline,
+        joinDate, months,
+        expiryDate: exp.toISOString(),
+        feeStatus, dueAmount, dueSince,
+        photo: photo || 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=400&q=80',
+        timestamp: Date.now()
+      };
+
+      try {
+        if (!id) {
+          await window.dbPush(window.dbRef(window.db, 'academy_students'), payload);
+          showToast(`Student ${name} enrolled!`);
+        } else {
+          await window.dbUpdate(window.dbRef(window.db, `academy_students/${id}`), payload);
+          showToast(`Student profile updated!`);
+        }
+        resetStudentForm();
+      } catch (err) {
+        showToast("Error saving student.", true);
+      }
+    }
+
+    function editStudent(id) {
+      const st = allStudents[id];
+      if (!st) return;
+      document.getElementById('edit-student-id').value = id;
+      document.getElementById('stud-name').value = st.name || '';
+      document.getElementById('stud-pass').value = st.password || '';
+      document.getElementById('stud-phone').value = st.phone || '';
+      document.getElementById('stud-belt').value = st.belt || 'White Belt';
+      document.getElementById('stud-discipline').value = st.discipline || 'Taekwondo Martial Arts';
+      document.getElementById('stud-joindate').value = st.joinDate || '';
+      document.getElementById('stud-months').value = st.months || 1;
+      document.getElementById('stud-feestatus').value = st.feeStatus || 'Paid';
+      document.getElementById('stud-dueamount').value = st.dueAmount || '0';
+      document.getElementById('stud-duedate').value = st.dueSince || '';
+      document.getElementById('stud-photo-url').value = st.photo || '';
+
+      document.getElementById('form-student-title').innerText = "Edit Student Profile";
+      document.getElementById('btn-save-stud-text').innerText = "Update Profile";
+      document.getElementById('btn-cancel-stud-edit').classList.remove('hidden');
+
+      // Switch to Student tab
+      switchAdminTab('tab-students', document.querySelectorAll('.admin-tab-btn')[1]);
+      window.scrollTo(0, 0);
+    }
+
+    function resetStudentForm() {
+      document.getElementById('edit-student-id').value = '';
+      document.getElementById('stud-name').value = '';
+      document.getElementById('stud-pass').value = '';
+      document.getElementById('stud-phone').value = '';
+      document.getElementById('stud-dueamount').value = '';
+      document.getElementById('stud-photo-url').value = '';
+      document.getElementById('stud-joindate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('stud-duedate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('form-student-title').innerText = "Register New Student";
+      document.getElementById('btn-save-stud-text').innerText = "Save Student Profile";
+      document.getElementById('btn-cancel-stud-edit').classList.add('hidden');
+    }
+
+    async function deleteStudent(id) {
+      if (!confirm("Are you sure you want to delete this student profile?")) return;
+      try {
+        await window.dbRemove(window.dbRef(window.db, `academy_students/${id}`));
+        showToast("Student deleted.");
+      } catch (e) {
+        showToast("Failed to delete.", true);
+      }
+    }
+
+    // STUDENT LOGIN & DASHBOARD
+    function openStudentLoginModal() {
+      document.getElementById('student-login-modal').classList.remove('hidden');
+    }
+
+    function closeStudentLoginModal() {
+      document.getElementById('student-login-modal').classList.add('hidden');
+    }
+
+    function handleStudentLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('stud-login-user').value.trim().toLowerCase();
+      const pass = document.getElementById('stud-login-pass').value.trim();
+
+      const keys = Object.keys(allStudents);
+      let foundId = null;
+
+      for (let k of keys) {
+        const st = allStudents[k];
+        const matchUser = (st.name || '').toLowerCase() === user || (st.phone || '') === user;
+        if (matchUser && (st.password || '') === pass) {
+          foundId = k;
+          break;
+        }
+      }
+
+      if (foundId) {
+        currentLoggedStudent = { id: foundId, ...allStudents[foundId] };
+        closeStudentLoginModal();
+        openStudentDashboard();
+      } else {
+        showToast("Invalid credentials. Ask Coach Sumit for password.", true);
+      }
+    }
+
+    function openStudentDashboard() {
+      if (!currentLoggedStudent) return;
+      const st = currentLoggedStudent;
+      document.getElementById('stud-dash-name').innerText = st.name;
+      document.getElementById('stud-dash-belt').innerText = st.belt || 'White Belt';
+      document.getElementById('stud-dash-discipline').innerText = st.discipline || 'Taekwondo';
+
+      // Avatar
+      const av = document.getElementById('stud-dash-avatar');
+      if (st.photo) av.innerHTML = `<img src="${st.photo}" class="w-full h-full object-cover">`;
+
+      // Remaining days
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const exp = st.expiryDate ? new Date(st.expiryDate) : null;
+      let left = exp ? Math.ceil((exp - today) / (1000 * 60 * 60 * 24)) : 0;
+      document.getElementById('stud-dash-daysleft').innerText = left > 0 ? `${left} Days` : 'Expired';
+
+      // Fee status card
+      const feeBox = document.getElementById('stud-dash-feestatus');
+      const isDue = (st.feeStatus === 'Due' || st.feeStatus === 'Partial' || Number(st.dueAmount) > 0);
+      if (isDue) {
+        const days = getDueDays(st.dueSince);
+        feeBox.className = "mt-4 p-4 rounded-xl bg-rose-500/10 border border-rose-500/40";
+        feeBox.innerHTML = `
+          <div class="flex items-center justify-between text-xs font-bold text-rose-400">
+            <span><i class="fa-solid fa-triangle-exclamation mr-1.5"></i> फीस बकाया है (Due Notice)</span>
+            <span class="text-sm">₹${st.dueAmount || 0}</span>
+          </div>
+          <div class="text-[11px] text-stone-300 mt-1">
+            आपकी फीस <strong>${days} दिनों</strong> से बाकी है। कृपया कोच सुमित शर्मा को जमा करें।
+          </div>
+        `;
+      } else {
+        feeBox.className = "mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/40";
+        feeBox.innerHTML = `
+          <div class="flex items-center space-x-2 text-xs font-bold text-emerald-400">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>फीस पूरी तरह जमा है (Membership Active)</span>
+          </div>
+        `;
+      }
+
+      document.getElementById('student-dash-modal').classList.remove('hidden');
+    }
+
+    function closeStudentDashModal() {
+      document.getElementById('student-dash-modal').classList.add('hidden');
+    }
+
+    function logoutStudent() {
+      currentLoggedStudent = null;
+      closeStudentDashModal();
+      showToast("Logged out successfully.");
+    }
+
+    async function markStudentAttendance() {
+      if (!currentLoggedStudent) return;
+      const todayDate = new Date().toISOString().split('T')[0];
+      const timeStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+      try {
+        await window.dbSet(window.dbRef(window.db, `academy_attendance/${todayDate}/${currentLoggedStudent.id}`), {
+          name: currentLoggedStudent.name,
+          belt: currentLoggedStudent.belt || 'White Belt',
+          time: timeStr,
+          timestamp: Date.now()
+        });
+        showToast("Today's Dojo attendance marked!");
+        document.getElementById('btn-stud-checkin').innerText = "Checked In";
+        document.getElementById('btn-stud-checkin').classList.replace('bg-emerald-600', 'bg-stone-700');
+      } catch (e) {
+        showToast("Error checking in.", true);
+      }
+    }
+
+    // STUDENT COMMUNITY POST UPLOAD
+    async function uploadStudentCommunityPost(fileInput) {
+      if (!currentLoggedStudent) return;
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const caption = document.getElementById('stud-post-caption').value.trim() || 'Training moment at Champions Sports Academy';
+      showToast("Uploading community post...");
+
+      uploadImageToImgbb(file, async (url) => {
+        try {
+          await window.dbPush(window.dbRef(window.db, 'academy_feed'), {
+            caption,
+            url,
+            authorName: currentLoggedStudent.name,
+            authorBelt: currentLoggedStudent.belt || 'Student',
+            timestamp: Date.now()
+          });
+          showToast("Posted to community feed!");
+          document.getElementById('stud-post-caption').value = '';
+        } catch (e) {
+          showToast("Failed to save post.", true);
+        }
+      });
+    }
+
+    // RENDER COMMUNITY FEED FOR BOTH USER & ADMIN
+    function renderCommunityFeed() {
+      const userGrid = document.getElementById('user-feed-grid');
+      const adminList = document.getElementById('admin-feed-list');
+      const keys = Object.keys(allFeed);
+
+      if (keys.length === 0) {
+        if (userGrid) userGrid.innerHTML = `<div class="col-span-full py-8 text-center text-stone-500">No community posts yet. Students can share photos!</div>`;
+        if (adminList) adminList.innerHTML = `<div class="col-span-full py-8 text-center text-stone-500">No posts to moderate.</div>`;
+        return;
+      }
+
+      // User Grid
+      if (userGrid) {
+        userGrid.innerHTML = keys.slice().reverse().map(k => {
+          const p = allFeed[k];
+          return `
+            <div class="bg-brand-card rounded-2xl overflow-hidden border border-stone-800">
+              <div class="h-60 bg-stone-900 overflow-hidden">
+                <img src="${p.url}" class="w-full h-full object-cover">
+              </div>
+              <div class="p-4">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-bold text-white">${p.authorName}</span>
+                  <span class="text-[10px] text-brand-red bg-brand-red/10 px-2 py-0.5 rounded font-bold">${p.authorBelt || 'Student'}</span>
+                </div>
+                <p class="text-xs text-stone-300 leading-relaxed">${p.caption || ''}</p>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Admin Moderator Grid (Edit & Delete options)
+      if (adminList) {
+        adminList.innerHTML = keys.slice().reverse().map(k => {
+          const p = allFeed[k];
+          return `
+            <div class="bg-stone-900 p-3 rounded-xl border border-stone-800 space-y-2">
+              <img src="${p.url}" class="w-full h-36 object-cover rounded-lg">
+              <div class="text-[11px] font-bold text-white flex justify-between">
+                <span>${p.authorName}</span>
+                <span class="text-brand-red">${p.authorBelt || ''}</span>
+              </div>
+              <input type="text" id="feed-edit-caption-${k}" value="${p.caption || ''}" class="w-full bg-brand-input border border-stone-700 rounded-lg px-2 py-1 text-xs text-white">
+              <div class="flex gap-2">
+                <button onclick="saveFeedCaption('${k}')" class="flex-1 bg-stone-800 hover:bg-stone-700 text-stone-200 py-1 rounded text-[11px] font-bold">
+                  Update
+                </button>
+                <button onclick="deleteFeedPost('${k}')" class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-1 rounded text-[11px] font-bold">
+                  Delete
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    async function saveFeedCaption(id) {
+      const input = document.getElementById(`feed-edit-caption-${id}`);
+      if (!input) return;
+      try {
+        await window.dbUpdate(window.dbRef(window.db, `academy_feed/${id}`), { caption: input.value.trim() });
+        showToast("Post caption updated!");
+      } catch (e) {
+        showToast("Error updating caption.", true);
+      }
+    }
+
+    async function deleteFeedPost(id) {
+      if (!confirm("Permanently delete this community post?")) return;
+      try {
+        await window.dbRemove(window.dbRef(window.db, `academy_feed/${id}`));
+        showToast("Post deleted.");
+      } catch (e) {
+        showToast("Failed to delete.", true);
+      }
+    }
+
+    // ATTENDANCE LEDGER LOGIC
+    function setAttendanceToday() {
+      const t = new Date().toISOString().split('T')[0];
+      document.getElementById('att-filter-date').value = t;
+      loadAttendanceForDate();
+    }
+
+    async function loadAttendanceForDate() {
+      const date = document.getElementById('att-filter-date').value;
+      const tbody = document.getElementById('attendance-table-body');
+      tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-stone-500">Loading attendance...</td></tr>';
+
+      if (!date) return;
+
+      try {
+        const snap = await window.dbGet(window.dbRef(window.db, `academy_attendance/${date}`));
+        const data = snap.val();
+        if (!data) {
+          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-stone-500">${date} को किसी ने चेक-इन नहीं किया।</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = Object.keys(data).map(uid => {
+          const rec = data[uid];
+          return `
+            <tr class="hover:bg-stone-900/50">
+              <td class="py-3 px-4 font-bold text-white">${rec.name}</td>
+              <td class="py-3 px-4 text-brand-red font-semibold">${rec.belt || 'White Belt'}</td>
+              <td class="py-3 px-4 text-stone-400 font-mono">${rec.time || 'Logged'}</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400">Present</span></td>
+            </tr>
+          `;
+        }).join('');
+      } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-rose-500">Error loading.</td></tr>';
+      }
+    }
+
+    // GALLERY LOGIC
+    async function handleGalleryAdd(e) {
+      e.preventDefault();
+      const caption = document.getElementById('gal-new-caption').value.trim();
+      const url = document.getElementById('gal-new-url').value.trim();
+      if (!url) return showToast("Upload photo or paste URL first!", true);
+
+      try {
+        await window.dbPush(window.dbRef(window.db, 'academy_gallery'), { caption, url, timestamp: Date.now() });
+        showToast("Added to gallery!");
+        document.getElementById('gal-new-caption').value = '';
+        document.getElementById('gal-new-url').value = '';
+      } catch (e) {
+        showToast("Error adding to gallery.", true);
+      }
+    }
+
+    async function deleteGalleryPhoto(id) {
+      if (!confirm("Delete this gallery photo?")) return;
+      try {
+        await window.dbRemove(window.dbRef(window.db, `academy_gallery/${id}`));
+        showToast("Photo removed.");
+      } catch (e) {
+        showToast("Error deleting photo.", true);
+      }
+    }
+
+    function renderGallery() {
+      const userGrid = document.getElementById('user-gallery-grid');
+      const adminList = document.getElementById('admin-gallery-list');
+      const countEl = document.getElementById('admin-gallery-count');
+      const keys = Object.keys(allGallery);
+
+      if (countEl) countEl.innerText = keys.length;
+
+      if (keys.length === 0) {
+        if (userGrid) userGrid.innerHTML = `<div class="col-span-full py-8 text-center text-stone-500">No photos added yet.</div>`;
+        if (adminList) adminList.innerHTML = `<div class="col-span-full py-8 text-center text-stone-500">No photos in gallery.</div>`;
+        return;
+      }
+
+      if (userGrid) {
+        userGrid.innerHTML = keys.map(k => `
+          <div class="h-44 sm:h-56 rounded-2xl overflow-hidden border border-stone-800 bg-stone-900 group relative">
+            <img src="${allGallery[k].url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3 text-white text-xs font-bold">
+              ${allGallery[k].caption || 'Dojo Moment'}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      if (adminList) {
+        adminList.innerHTML = keys.map(k => `
+          <div class="relative group rounded-xl overflow-hidden border border-stone-800 bg-stone-900">
+            <img src="${allGallery[k].url}" class="w-full h-28 object-cover">
+            <div class="p-2 text-[11px] truncate text-stone-300">${allGallery[k].caption || ''}</div>
+            <button onclick="deleteGalleryPhoto('${k}')" class="absolute top-2 right-2 bg-rose-600 hover:bg-rose-700 text-white w-6 h-6 rounded flex items-center justify-center text-xs">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `).join('');
+      }
+    }
+
+    // DEMO / TRIAL INQUIRY
+    async function handleInquirySubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit-inquiry');
+      btn.disabled = true;
+      btn.innerText = "Submitting...";
+
+      const payload = {
+        name: document.getElementById('inq-name').value.trim(),
+        phone: document.getElementById('inq-phone').value.trim(),
+        program: document.getElementById('inq-program').value,
+        date: document.getElementById('inq-date').value,
+        msg: document.getElementById('inq-msg').value.trim() || 'Demo Class Request',
+        timestamp: Date.now()
+      };
+
+      try {
+        await window.dbPush(window.dbRef(window.db, 'academy_inquiries'), payload);
+        showToast("Trial Request Sent! Coach Sumit will contact you soon.");
+        e.target.reset();
+      } catch (err) {
+        showToast("Error sending request. Please call directly.", true);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Submit Demo Request";
+      }
+    }
+
+    // SETTINGS ADMIN
+    function populateAdminSettings() {
+      const s = stateSettings;
+      document.getElementById('set-name').value = s.name || '';
+      document.getElementById('set-tagline').value = s.tagline || '';
+      document.getElementById('set-phone').value = s.phone || '';
+      document.getElementById('set-whatsapp').value = s.whatsapp || '';
+      document.getElementById('set-address').value = s.address || '';
+      document.getElementById('set-trialcta').value = s.trialCtaText || '';
+      document.getElementById('set-callcta').value = s.callCtaText || '';
+      document.getElementById('set-insta').value = s.instagramUrl || '';
+      document.getElementById('set-maplink').value = s.mapUrl || '';
+    }
+
+    async function saveAcademySettings() {
+      const updated = {
+        name: document.getElementById('set-name').value.trim(),
+        tagline: document.getElementById('set-tagline').value.trim(),
+        phone: document.getElementById('set-phone').value.trim(),
+        whatsapp: document.getElementById('set-whatsapp').value.trim(),
+        address: document.getElementById('set-address').value.trim(),
+        trialCtaText: document.getElementById('set-trialcta').value.trim(),
+        callCtaText: document.getElementById('set-callcta').value.trim(),
+        instagramUrl: document.getElementById('set-insta').value.trim(),
+        mapUrl: document.getElementById('set-maplink').value.trim()
+      };
+
+      try {
+        await window.dbSet(window.dbRef(window.db, 'academy_settings'), updated);
+        showToast("Settings & CTA buttons updated in real-time!");
+      } catch (e) {
+        showToast("Failed to save settings.", true);
+      }
+    }
+
+    // INIT
+    window.addEventListener('load', () => {
+      initFirebaseSync();
+      applySettingsToUI();
+      const today = new Date().toISOString().split('T')[0];
+      const jDate = document.getElementById('stud-joindate');
+      const dDate = document.getElementById('stud-duedate');
+      if (jDate) jDate.value = today;
+      if (dDate) dDate.value = today;
+    });
+  </script>
+</body>
+</html>
